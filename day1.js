@@ -1,4 +1,4 @@
-import { getInputFile } from "./helper.js";
+import { getInputFile, addNumList } from "./helper.js";
 
 
 function getPartForElves(text){
@@ -10,13 +10,13 @@ function getCalArray(elfCalText){
     return items;
 }
 
-const add = (n) => n.reduce((total, cur) => total + cur)
+
 
 function calculateD1_1(input){
     
     let elfCalories = getPartForElves(input)
                             .map(getCalArray)
-                            .map(add)
+                            .map(addNumList)
     console.log(elfCalories);
 
     var largest = Math.max.apply(0, elfCalories); 
@@ -31,7 +31,7 @@ function calculateD1_2(input) {
 
     let sorted = elfCalories.sort((a,b) => b - a)
     let largest = sorted.slice(0,3);
-    let total = add(largest);
+    let total = addNumList(largest);
     console.log("total:", total);
 
     console.log("sorted", sorted)
@@ -60,5 +60,5 @@ function main(useExample) {
     calculateD1_2(input);
 }
 
-main(false);
+main(true);
 
