@@ -10,9 +10,34 @@ function getCalArray(elfCalText){
     return items;
 }
 
+const add = (n) => n.reduce((total, cur) => total + cur)
 
+function calculateD1_1(input){
+    
+    let elfCalories = getPartForElves(input)
+                            .map(getCalArray)
+                            .map(add)
+    console.log(elfCalories);
 
-function main(){
+    var largest = Math.max.apply(0, elfCalories); 
+
+    console.log('winner: ' + largest)
+}
+
+function calculateD1_2(input) {
+    let elfCalories = getPartForElves(input)
+                            .map(getCalArray)
+                            .map(n => n.reduce((total, cur) => total + cur))
+
+    let sorted = elfCalories.sort((a,b) => b - a)
+    let largest = sorted.slice(0,3);
+    let total = add(largest);
+    console.log("total:", total);
+
+    console.log("sorted", sorted)
+}
+
+function main(useExample) {
     let example = `1000
 2000
 3000
@@ -28,16 +53,12 @@ function main(){
 
 10000`;
 
-let input = fs.readFileSync("./inputs/day1_1.txt", "utf-8");
+    let input = useExample ? example : fs.readFileSync("./inputs/day1_1.txt", "utf-8");
 
-    let elfCalories = getPartForElves(input)
-                            .map(getCalArray)
-                            .map(n => n.reduce((total, cur) => total + cur))
-    console.log(elfCalories);
-
-    var largest = Math.max.apply(0, elfCalories); 
-
-    console.log('winner: ' + largest)
+    calculateD1_1(input);
+    console.log("---")
+    calculateD1_2(input);
 }
 
-main();
+main(false);
+
