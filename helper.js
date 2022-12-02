@@ -8,3 +8,7 @@ export function getInputFile(name){
 export function addNumList(list) {
     return list.reduce((total, cur) => total + cur)
 }
+
+export function splitByLine(txt){
+    return txt.split('\n');
+}
