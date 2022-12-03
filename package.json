@@ -5,7 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node $(ls src/day*.js | tail -n 1)",
+    "timed": "time -f \"CPU: %P\tSeconds: %e\" npm run start"
   },
   "repository": {
     "type": "git",

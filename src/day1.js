@@ -53,7 +53,7 @@ function main(useExample) {
 
 10000`;
 
-    let input = useExample ? example : getInputFile('day1_1.txt')//fs.readFileSync("./inputs/day1_1'.txt", "utf-8");
+    let input = useExample ? example : getInputFile('day1.txt');
 
     calculateD1_1(input);
     console.log("---")
