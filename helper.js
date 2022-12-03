@@ -12,3 +12,11 @@ export function addNumList(list) {
 export function splitByLine(txt){
     return txt.split('\n');
 }
+
+export function mapLine(input, handler){
+    return splitByLine(input).map (handler)
+}
+
+export function intersect(lhs, rhs){
+    return lhs.filter(element => rhs.includes(element))
+}
