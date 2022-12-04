@@ -18,13 +18,33 @@ function pairIsSubRange(lhs, rhs){
     }
 }
 
+function pairIsPartialSubRange(lhs, rhs){
+
+    let lStart = lhs[0];
+    let lEnd = lhs[1];
+
+    let rStart = rhs[0];
+    let rEnd = rhs[1];
+
+    if (lStart <= rEnd && rStart <= lEnd) {
+        return true;
+    }
+
+}
+
 function detectCompleteOverlap(lhs, rhs){
 
     if (pairIsSubRange(lhs, rhs) || pairIsSubRange(rhs, lhs)) {
         return true;   
     }
     return false;
+}
 
+function detectOverlap(lhs, rhs){
+    if (pairIsPartialSubRange(lhs, rhs) || pairIsPartialSubRange(rhs, lhs))  {
+        return true;   
+    }
+    return false;
 }
 
 function splitPair(handler){
@@ -43,10 +63,19 @@ function challenge1(input){
     console.log('count: ', contained.filter(n => n).length)
 }
 
+function challenge2(input){
+    console.log('challenge 2');  
+    let elfPairsSections = mapLine(input, getRangesFromInputLine)
+    let contained = elfPairsSections.map(splitPair(detectOverlap))
+    console.log(contained)
+    console.log('count: ', contained.filter(n => n).length)
+}
+
 function main(){
     // let input = example;
     let input = getInputFile('day4.txt');
     challenge1(input);
+    challenge2(input);
 }
 
 main();
