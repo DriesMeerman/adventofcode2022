@@ -19,7 +19,18 @@ function pairIsSubRange(lhs, rhs){
 }
 
 function detectCompleteOverlap(lhs, rhs){
-    
+
+    if (pairIsSubRange(lhs, rhs) || pairIsSubRange(rhs, lhs)) {
+        return true;   
+    }
+    return false;
+
+}
+
+function splitPair(handler){
+    return function(pair) {
+        return handler(pair[0], pair[1]);
+    }
 }
 
 function challenge1(input){
@@ -27,12 +38,7 @@ function challenge1(input){
     let elfPairsSections = mapLine(input, getRangesFromInputLine)
     console.log(elfPairsSections);
 
-    let contained = elfPairsSections.map(pair => {
-        if (pairIsSubRange(pair[0], pair[1]) || pairIsSubRange(pair[1], pair[0])) {
-            return true;   
-        }
-        return false;
-    })
+    let contained = elfPairsSections.map(splitPair(detectCompleteOverlap))
 
     console.log('count: ', contained.filter(n => n).length)
 }
