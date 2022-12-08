@@ -39,7 +39,7 @@ function challenge2(input) {
     console.log('Challenge 2')
     let result = mapLine(input, (line) => {
         return findDistinctCharacters(line, 14);
-    })
+    });
 
     console.log('Start of packets', result)
 }

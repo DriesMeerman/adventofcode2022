@@ -13,8 +13,14 @@ export function splitByLine(txt){
     return txt.split('\n');
 }
 
+
+
 export function mapLine(input, handler){
-    return splitByLine(input).map (handler)
+    return splitByLine(input).map(handler)
+}
+
+export function reduceLine(input, handler, initial){
+    return splitByLine(input).reduce(handler, initial);
 }
 
 export function intersect(lhs, rhs){
