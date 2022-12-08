@@ -68,6 +68,10 @@ function buildStructure(input){
                 total[currentFolder]["size"] = total[currentFolder]["size"] + filesize
                 total[currentFolder]["files"].push(filename)
 
+                if (currentFolder == "/") {
+                    return total;
+                }
+
                 let parts = currentFolder.split('/')
                 let _current = parts.pop();
 
@@ -92,25 +96,27 @@ function challenge1(input) {
         }
         return total;
     },0);
-    console.log(totalSum)
-    // let countedDirs = [];
-    // Object.keys(data).forEach(path => {
-    //     if (data[path].size < 100000) {
-    //         if (countedDirs.some(n => {
-    //             return path.includes(n);
-    //         })) {
-    //             console.log(`${path} was already counted skipping`);
-    //             return;
-    //         }
-    //         console.log('counting: ', path)
-    //         countedDirs.push(path);
-    //     } else {
-    //         console.log('too big skip', path)
-    //     }
-    // })
+    console.log(`Answer:`, totalSum)
+
 }
 function challenge2(input) {
     console.log('Challenge 2')
+    const data = buildStructure(input);
+    const usedSpace = data['/'].size
+    const unusedSpace = (70000000 - usedSpace)
+    let requiredSpace = 30000000 - unusedSpace;
+    // console.log(`70000000-${usedSpace} = ${unusedSpace}\n30000000-${unusedSpace} = ${requiredSpace}`)
+
+    let deleteCandidates = Object.keys(data).reduce((total,path) => {
+        if (data[path].size >= requiredSpace) {
+            total.push({path, size: data[path].size});
+        }
+        return total;
+    },[]).sort((a,b) => {
+        return a.size - b.size;
+    });
+    // console.log('counted', deleteCandidates)
+    console.log('result: ', deleteCandidates[0])
 }
 
 function main(){
