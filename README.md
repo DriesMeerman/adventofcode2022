@@ -38,6 +38,7 @@ function main(){
     let input = example;
     // let input = getInputFile('day.txt');
     challenge1(input);
+    console.log('\n');
     challenge2(input);
 }
 
