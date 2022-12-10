@@ -151,13 +151,14 @@ noop`;
 
 
 class Computah {
-    constructor(input, predicate, handler){
+    constructor(input, predicate, handler, postCycleHandler){
         this.x = 1;
         this.cycle = 0;
         this.instructions = [];
         this.currentOp = null;
         this.cyclePredicate = predicate || null;
         this.cycleHandler = handler || null;
+        this.postCycleHandler = postCycleHandler || null;
 
         if (input) {
             this.loadProgram(input)
@@ -207,11 +208,15 @@ class Computah {
                 // console.log('No more instructions or pending instructions');
                 isRunning = false;
             }
+            if (this.postCycleHandler){
+                this.postCycleHandler(this.cycle, this.x);
+            }
         }
     }
 
     process(op){
         if (op.action == 'addx') {
+            // console.log(`Adding ${op.param}, during cycle ${this.cycle}`)
             this.x += op.param;
         }
     }
@@ -261,6 +266,27 @@ function challenge1(input) {
 }
 function challenge2(input) {
     console.log('Challenge 2')
+    let output = "";
+
+    // OFF BY ONE BUT READABLE
+
+    let device = new Computah(input, null, null, (cycle, x) => {
+        let crtx = cycle % 40
+        if (crtx == 0) {
+            output += '\n';
+        }
+
+        if (crtx == x-1 || crtx == x || crtx == x+1){
+            output += "#"
+        } else {
+            output += ".";
+        }
+    })
+
+    device.start();
+    console.log("CRT:\n---------------------------------\n")
+    console.log(output)
+    console.log("---------------------------------\n")
 }
 
 function main(){
