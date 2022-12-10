@@ -268,10 +268,8 @@ function challenge2(input) {
     console.log('Challenge 2')
     let output = "";
 
-    // OFF BY ONE BUT READABLE
 
-    let device = new Computah(input, null, null, (cycle, x) => {
-        let crtx = cycle % 40
+    const addPixels = (cycle, x) => {let crtx = cycle % 40
         if (crtx == 0) {
             output += '\n';
         }
@@ -281,10 +279,13 @@ function challenge2(input) {
         } else {
             output += ".";
         }
-    })
+   }
+    let device = new Computah(input, null, null, addPixels)
 
+    // Off by one so manually calculate first state
+    addPixels(device.cycle, device.x)
     device.start();
-    console.log("CRT:\n---------------------------------\n")
+    console.log("CRT:\n---------------------------------")
     console.log(output)
     console.log("---------------------------------\n")
 }
