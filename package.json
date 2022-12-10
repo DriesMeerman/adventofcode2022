@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node $(ls src/day*.js | tail -n 1)",
+    "start": "node $(ls -v src/day*.js | tail -n 1)",
     "timed": "time -f \"CPU: %P\tSeconds: %e\" npm run start"
   },
   "repository": {
