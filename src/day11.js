@@ -1,4 +1,4 @@
-import { mapLine, getInputFile, getNumberFromLine, Logger } from "./helper.js";
+import { mapLine, getInputFile, getNumberFromLine, Logger, timeChallenge } from "./helper.js";
 
 let example =
 `Monkey 0:
@@ -33,7 +33,7 @@ Test: divisible by 17
 	const logger = new Logger(Logger.LEVELS.WARNING);
 
 	class Monkey {
-			constructor(txt){
+			constructor(txt, canGoMaxStress){
 					let [identifier, items, operation, test, success, failure] = txt.split('\n');
 					// logger.log(txt.split('\n'))
 					this.id = Number(identifier.replace(':', '').split(' ')[1]);
@@ -44,6 +44,7 @@ Test: divisible by 17
 					this.falseMonkey = getNumberFromLine(failure);
 
 					this.itemsInspected = 0;
+					this.canGoMaxStress = canGoMaxStress || false;
 					this.friends = []; // including a self monkey reference because they dont throw to themselves
 			}
 
@@ -52,6 +53,7 @@ Test: divisible by 17
 			}
 
 			receiveItem(level){
+				logger.debug(`Monkey ${this.id}, receive`, level)
 				this.items.push(level);
 			}
 
@@ -59,9 +61,21 @@ Test: divisible by 17
 				this.itemsInspected++;
 				let old = level;
 				let newValue = eval(this.operation);
-				logger.debug(`Monkey ${this.id} inspected: ${level} -> ${newValue} -> ${Math.floor(newValue / 3)}`)
-				newValue = Math.floor(newValue / 3);
+				logger.debug(`Monkey ${this.id} inspected: ${level} -> ${newValue}`)
+				newValue = this.lowerStressLevel(newValue)
+				logger.debug(`\tFinal stress ${newValue}`)
 				return newValue
+			}
+
+			lowerStressLevel(level){
+				// assume the diviser is a prime
+				// find number in the same equivalence class
+				if (!this.canGoMaxStress) {
+					return  Math.floor(level / 3);
+				}
+				
+				let dividers = this.friends.map(m => m.testDivider);
+				return getRelatifeModNumber(level, dividers);
 			}
 
 			yeetItems(){
@@ -79,6 +93,11 @@ Test: divisible by 17
 			}
 }
 
+function getRelatifeModNumber(num, primedivs){
+	let primeDivProduct = primedivs.reduce((t,c) => t*c);
+	return num % primeDivProduct;
+}
+
 function calcMonkeyBusiness(monkeys){
 	let sorted = monkeys.sort((a, b) => b.itemsInspected - a.itemsInspected);
 	logger.log(sorted.map(x => x.itemsInspected))
@@ -92,9 +111,9 @@ function listMonkeyItems(monkeys){
 	})
 }
 
-function loadMonkeys(input){
+function loadMonkeys(input, canLowerStress){
 		let monkeyText = input.split('\n\n');
-		return monkeyText.map(m => new Monkey(m));
+		return monkeyText.map(m => new Monkey(m, canLowerStress));
 
 }
 
@@ -116,14 +135,27 @@ function challenge1(input) {
 }
 function challenge2(input) {
 		console.log('Challenge 2');
+		let monkeys = loadMonkeys(input, true);
+		monkeys.forEach(m => m.setFriends(monkeys));
+	
+
+		const maxRounds = 10000;
+		for (let round = 0; round < maxRounds; round++){
+			logger.debug(`\nRound ${round}`);
+			monkeys.forEach(m => m.yeetItems());
+		}
+
+		const result = calcMonkeyBusiness(monkeys);
+		logger.log("Monkey Business 2:",result)
 }
 
 function main(){
 		// let input = example;
 		let input = getInputFile('day11.txt');
-		challenge1(input);
+		
+		timeChallenge(input, challenge1);
 		console.log('\n');
-		challenge2(input);
+		timeChallenge(input, challenge2);
 }
 
 main();

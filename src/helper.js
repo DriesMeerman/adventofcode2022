@@ -33,7 +33,8 @@ export function timeChallenge(input, challengeMethod, basePath){
     challengeMethod(input);
     const endTime = performance.now()
 
-    console.log(`\nTimed: ${challengeMethod.name} ${endTime - startTime} ms in ${basePath || ""} `);
+    let pathString = basePath ? `in ${basePath}` : ""
+    console.log(`\nTimed: ${challengeMethod.name} ${endTime - startTime} ms ${pathString}`);
 }
 
 export function makeMatrix(heigth, width, val){
@@ -62,6 +63,13 @@ export class Logger{
         ERROR: 30
     }
 
+    static COLORS = {
+        reset: "\x1b[0m",
+        fgRed: "\x1b[31m",
+        fgYellow:  "\x1b[33m",
+        fgGreen: "\x1b[32m"
+    }
+
     constructor(level){
         this.level = level;
     }
@@ -79,15 +87,18 @@ export class Logger{
     }
 
     error(){
-        if (this.level <= 30) console.log(...arguments)
+        if (this.level <= 30) {
+            arguments[0] = Logger.COLORS.fgRed + arguments[0] + Logger.COLORS.reset;
+            console.log(...arguments)
+        }
     }
 
     setLog(){
-        this.level = LEVELS.LOG
+        this.level = Logger.LEVELS.LOG
     }
 
     setDebug(){
-        this.level = LEVELS.DEBUG
+        this.level = Logger.LEVELS.DEBUG
     }
 
 }
