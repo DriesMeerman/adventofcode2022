@@ -1,34 +1,29 @@
-# Advent of Code 2022
-
-Implementation of challenges defined in [Advent of Code](https://adventofcode.com/2022).
-
-# Usage
-From the root folder:
-
- `npm run start`
-
-To run the latest challenge.
-To do the same with timing:
-
- `npm run timed`
-
-To run any specific day:
-
-`node src/day3.js`
-
-Pointing to the file for the specific day.
-
-
-## Day template
-```javascript
 
 import { mapLine, getInputFile,  Logger, timeChallenge  } from "./helper.js";
 
 let example =
-``;
+`Sabqponm
+abcryxxl
+accszExk
+acctuvwj
+abdefghi`;
+
+function loadMap(input){
+    return mapLine(input, (l) => {
+        return l.split('').map(char => {
+            let numeric = char.charCodeAt();
+            if (char == 'S') return 'Start';
+            if (char == 'E') return 'End';
+
+            return numeric - 97;
+        })
+    })
+}
 
 function challenge1(input) {
     console.log('Challenge 1')
+    const map = loadMap(input);
+    console.table(map)
 }
 function challenge2(input) {
     console.log('Challenge 2')
@@ -44,4 +39,3 @@ function main(){
 }
 
 main();
-```
